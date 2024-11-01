@@ -24,6 +24,34 @@ container.innerHTML=''
 //调用原来的app的mount的方法挂载组件上的
 resolveRootNamespace这个函数的作用是检查给定的容器元素是否属于特殊的命名空间，如果是会以特殊的方式进行处理的
 const proxy = mount(container,flase,resolveRootNameSpace(container))
+![alt text](image-14.png)
+
+
+![alt text](image-15.png)
+
+![alt text](image-16.png)
+
+![alt text](image-17.png)
+
+![alt text](image-18.png)
+
+![alt text](image-19.png)
+
+createVNode的过程，h函数的本质
+![alt text](image-20.png)
+
+isObject是一个对象不是数组，第二个参数propsOrChildren是一个VNode那么直接作为createVNode的第三个数组的一个子节点就可以了，
+```js
+export const createVNode = (
+    __DEV__ ? createVNodeWithArgsTransform: _createVNode 
+
+) as typeof _createVNode 
+```
+![alt text](image-21.png)
+
+根据type的类型的不同，将shapeFlag进行记录编码
+包括元素/suspense/tetelport/stateful_component/functional_component 
+![alt text](image-22.png)
 
 
 
