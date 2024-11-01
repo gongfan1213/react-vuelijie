@@ -53,5 +53,15 @@ export const createVNode = (
 包括元素/suspense/tetelport/stateful_component/functional_component 
 ![alt text](image-22.png)
 
-
+最终创建createBaseVNode来创建vnode
+return createBaseVNode (
+    type,
+    props,
+    children,
+    patchFlag,
+    dynamicProps,
+    shapeFlag,
+    isBlockNode,
+    true
+)
 
