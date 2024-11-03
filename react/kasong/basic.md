@@ -387,3 +387,158 @@ Pnpm lin react --global
 Npm start 
 第一个打印的是react,
 
+# reconciler作用
+jquery->调用宿主环境api->展示数据
+现在是运行时的核心模块,reconciler,renderer调用宿主环境的api
+描述ui的方法,jsx和模板语法-》编译优化
+消费的时jsx
+react时一个纯运行时的前端框架时候的核心模块(reconciler,renderer)调用宿主环境api
+消费jsx
+没有编译优化
+开发通过的api提供给不同的宿主环境使用
+
+# 核心消费jsx的过程
+核心模块操作的数据结构时什么？开发者编写的jsx->编写成方法的执行，
+React element如果作为核心模块的操作的数据结构，存在的问题：无法表达节点之间的琯溪，字段有限，不好拓展（比如无法表达状态），所以需要一种新的数据结构特的特点时:
+运行时的核心模块（reconciler,renderer)->(调用)->宿主环境的api
+介于react element与真实的ui节点之间的
+能够表单节点之间的关系
+方便拓展（不仅作为数据存储单元，也能作为工作单元）
+fibernode虚拟dom在react当中的实现，了解的节点类型:jsx,react element,fibernode dom element 
+# reconciler的工作方式
+对于同一个节点，比较reactelement和fiberNode生成子fibernode,并且根据比较的结果生成不同的标记，扇入删除，移动等等，对应不同的宿主环境的api的执行
+当所有的reactElemnt比较完成以后会生成一个fiberNode树，一共会存在两颗fiberNode树，
+current:和当前视图真实的ui对应的fiberNode树
+workInProgress触发更新以后，正在reconciler当中的计算的fiberNode树
+flags保存的对应的标记
+```js
+export const NoFlags = 0b000001;
+export const Placement = 0b00001;
+export const Update = 0b0000100;
+export const ChildDeletetion = 0b0001000;
+export type Flags = number;
+import {flags,NoFlags} from './../';
+
+export class FiberNode {
+    type :any ;
+    tag: WorkTag;
+    pendingProps :Props ;
+    key:Key ;
+    stateNode:any;
+    ref: Ref;
+    flags: flags;
+    constructor(tag, pendingProps, key, mode, ref) {
+        this.tag = tag;
+        this.pendingProps = pendingProps;
+        this.key = key;
+        this.mode = mode;
+        this.ref = ref;
+        this.child = null;
+        this.sibling = null;
+        this.return = null;
+        this.stateMode = null ;
+        this.type = null ;
+        //FunctionComponent()=>{}
+        this.return =null;
+        //指向父de1fiberNode ;
+        this.sibling =null;指向兄弟
+        this.child = null;
+        this.index =0 ;
+        <ul>*3</ul>
+        this.ref = null;
+
+        this.memoizedProps = null;
+        this.memoizedState = null;
+        this.updateQueue = null;
+        //作为工作单元
+        this.pendingProps = pendingProps ;//刚开始的props
+        this.memizedProps = memoizedProps;//确定下来的props时什么样的
+        this.type = null; 
+        //副作用
+        this.flags =Noflags;
+
+//componentwillUnmount的执行顺序时候dfs书蓄奴，dfs递归的过程，
+//先往下再网上，先子组件，再父组件
+
+}
+
+//worktags.ts
+export const FunctionComponent = 0;
+export const HostRoot =3 ; 
+export const HostComponent =5 ;
+export const HostText = 6;
+//div下的文本
+export type WorkTag = typeof FunctionComponent | typeof HostRoot | typoef HostComponent ;
+
+
+```
+
+```js
+
+//递归当中的递阶段
+export const beginWork = () => {
+    //子fibernode ,react element和fibernode比较生成子的fibernode 
+
+}
+export const completeWork=() => {
+    //递归当中的归 
+
+}
+let workInProgress: FiberNode | null = null;
+function renderRoot() {
+    //初始化一下
+    //当前的workInProgress指向需要遍历的第一个fiberNode
+}
+function prepareFreshStack(fiber:FiberNode ) {
+    workInProgress =fiber ;
+}
+function renderRoot (root:FiberNode) {
+    //初始化一下
+    prepareFreshStack(root);
+    do{
+        try {
+            workLoop();
+            break;
+        }
+        catch(e){
+            console.warn('workloop发生错误',e)
+            workInProgress=null
+        }
+    }while(true);
+}
+function workloop() {
+    while (workInProgress!==null) {
+        performUnitOfWork(workInProgress);
+    }
+}
+function performUnitOfWork(fiber:FiberNode)  {
+    const next = beginWork(fiber);
+    fiber.memoizedProps = fiber.pendingProps;
+    if(next === null){
+        //递归到最深层的
+        completeUnitOfWork(fiber);
+        
+    }else {
+        workInProgress = next;
+
+    }
+
+}
+function completeUnitOfWork(fiber:FiberNode) {
+    let node :FiberNode |null =fiber;
+    do {
+        const next = completeWork(node);
+        //递归的过程始终网上的
+        const siblind = node.sibling;
+        if(sibling!==null) {
+            workInProgress =sibling;
+            return;
+
+        }
+        node = node.return ;
+        workInProgress =null;
+        
+    }
+    while(node!==null)
+}
+```
