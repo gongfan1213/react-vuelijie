@@ -1,6 +1,6 @@
-createApp
-就是帮助我们创建一个渲染器
-ensureRenderer实例化一个渲染器，渲染器就是把vue代码组件渲染到dom上的，返回一个渲染器以后
+- createApp
+- 就是帮助我们创建一个渲染器
+- ensureRenderer实例化一个渲染器，渲染器就是把vue代码组件渲染到dom上的，返回一个渲染器以后
 渲染器里面必然包含一个createApp的方法，并且会返回一个app对象
 ensureRenderer创建一个渲染器的对象，方法createApp调用这个方法会返回一个app
 判断是否已经创建了渲染器，如果已经创建了，那么就直接返回的
