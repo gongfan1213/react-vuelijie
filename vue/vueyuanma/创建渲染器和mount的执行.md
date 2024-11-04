@@ -1,12 +1,12 @@
-ensureRenderer实例化一个渲染器，渲染器就是把vue代码组件渲染到dom上的
-返回一个渲染器，渲染里面必然包含一个createApp的方法，并且会返回一个app对象
-//ensureRenderer创建一个渲染器的对象
-const app = ensureRenderer().createApp(...args)
-//返回渲染器的对象上有createApp调用这个方法会返回一个app
-nodeOps就是dom是如何操作的
+- ensureRenderer实例化一个渲染器，渲染器就是把vue代码组件渲染到dom上的
+- 返回一个渲染器，渲染里面必然包含一个createApp的方法，并且会返回一个app对象
+- //ensureRenderer创建一个渲染器的对象
+- const app = ensureRenderer().createApp(...args)
+- //返回渲染器的对象上有createApp调用这个方法会返回一个app
+- nodeOps就是dom是如何操作的
 
-按住这个
-nodeOps传入到createRender当中，
+- 按住这个
+- nodeOps传入到createRender当中，
 # batchProps
 
 ```bash
