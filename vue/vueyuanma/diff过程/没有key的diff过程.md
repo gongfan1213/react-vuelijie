@@ -227,7 +227,7 @@ const patchChildren: PatchChildrenFn = (
   }
 
 ```
-先判断有没有key没有key的话就是一个一个对比的，
+- 先判断有没有key没有key的话就是一个一个对比的，
 # key对比的过程
 ```
 const patchUnkeyedChildren = (
