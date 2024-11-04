@@ -1,10 +1,10 @@
 # diff算法
-App组件-》VNode ,children虚拟dom,虚拟domtree,VDomTree ->渲染成为真实的dom
-对比前后虚拟dom树，找出最小的差异，新的虚拟dom树和旧的虚拟dom树进行比较，找出不同的地方
-避免不必要的dom更新：通过比较新旧虚拟dom树,diff算法只更新需要变更的部分
-局部更新，patching方式仅仅更新这些部分
-更高效的节点处理，diff算法通常使用一些优化技术vue3当中的最长递增子序列LIS算法，减少节点的移动操作次数
-静态内容优化，编译阶段识别静态内容，diff算法能够再更新的时候跳过这些静态的内容的比较，进一步减少更新和渲染的开销
+- App组件-》VNode ,children虚拟dom,虚拟domtree,VDomTree ->渲染成为真实的dom
+- 对比前后虚拟dom树，找出最小的差异，新的虚拟dom树和旧的虚拟dom树进行比较，找出不同的地方
+- 避免不必要的dom更新：通过比较新旧虚拟dom树,diff算法只更新需要变更的部分
+- 局部更新，patching方式仅仅更新这些部分
+- 更高效的节点处理，diff算法通常使用一些优化技术vue3当中的最长递增子序列LIS算法，减少节点的移动操作次数
+- 静态内容优化，编译阶段识别静态内容，diff算法能够再更新的时候跳过这些静态的内容的比较，进一步减少更新和渲染的开销
 ```js
 
   const setupRenderEffect: SetupRenderEffectFn = (
@@ -316,17 +316,17 @@ App组件-》VNode ,children虚拟dom,虚拟domtree,VDomTree ->渲染成为真�
 
 ```
 
-数据发生变化的时候执行调度，queueJob(update)
-数据发生变化以后，effect调度函数
-调用nextTree=renderComponentRoot(instance)拿到我们最新的数据，然后再调用patch
-patch(prevTree,nextTree,instance实例保存的，)
+- 数据发生变化的时候执行调度，queueJob(update)
+- 数据发生变化以后，effect调度函数
+- 调用nextTree=renderComponentRoot(instance)拿到我们最新的数据，然后再调用patch
+- patch(prevTree,nextTree,instance实例保存的，)
 ![alt text](image-23.png)
-keychilren,unkeychildren,
-patchBlockChildren(n1.dynamicChildren,dynamicChildren,container,parentComponent,parentSuspense,namespace,slotScopeIds)
-block编译
-为了创建VNode数组，只有依赖动态数据的节点dynamicChildren:[]
-patchFlag:有哪些东西发生了变化的，精准进行靶向的更新的，patchFlag记录具体变化的是什么，使用了位运算的方式
-没有block和dynamicCHildren才会进行patchChildren:n1,n2,container,fragmentEndAnchor,parentComponent,parentSuspense,namespace,slotScopeIds,optimized
+- keychilren,unkeychildren,
+- patchBlockChildren(n1.dynamicChildren,dynamicChildren,container,parentComponent,parentSuspense,namespace,slotScopeIds)
+- block编译
+- 为了创建VNode数组，只有依赖动态数据的节点dynamicChildren:[]
+- patchFlag:有哪些东西发生了变化的，精准进行靶向的更新的，patchFlag记录具体变化的是什么，使用了位运算的方式
+- 没有block和dynamicCHildren才会进行patchChildren:n1,n2,container,fragmentEndAnchor,parentComponent,parentSuspense,namespace,slotScopeIds,optimized
 ```js
  const patchBlockChildren: PatchBlockChildrenFn = (
     oldChildren,
@@ -523,6 +523,6 @@ const patchElement = (
   }
   ```
 
-  只有依赖动态数据的节点放到dynamicChildren当中去的
+  - 只有依赖动态数据的节点放到dynamicChildren当中去的
 patch(prevTree,nextTree,hostParentNode,getNextHostNode,instance,parentSuspense,namespace)
 ![alt text](image-24.png)
