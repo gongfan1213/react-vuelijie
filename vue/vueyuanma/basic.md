@@ -8,14 +8,14 @@ pnpm install pnpm run dev
 159
 # vue3的整体架构
 ![alt text](image-1.png)
-我们所编写的vue的组件，vue的组件会被转化成为render函数，render函数会生成虚拟dom,render函数的本质就是返回虚拟dom数据，vnode,虚拟dom会被渲染成为真实的dom树
-compiler编译器，render函数，vnode虚拟dom转换成为真实的dom渲染起renderer,
-ref,reactive,computed本质上就是dirty数据脏数据会重新执行的，使用这些数据，这些数据通过响应式原理收集依赖，多了一层封装而已，reactiveeffect,数据发生变化重新render就是update生成另外一个虚拟dom进行diff算法，
-另外一个系统，render函数当中依赖于reactive重新执行render函数，响应式系统
+- 我们所编写的vue的组件，vue的组件会被转化成为render函数，render函数会生成虚拟dom,render函数的本质就是返回虚拟dom数据，vnode,虚拟dom会被渲染成为真实的dom树
+- compiler编译器，render函数，vnode虚拟dom转换成为真实的dom渲染起renderer,
+- ref,reactive,computed本质上就是dirty数据脏数据会重新执行的，使用这些数据，这些数据通过响应式原理收集依赖，多了一层封装而已，reactiveeffect,数据发生变化重新render就是update生成另外一个虚拟dom进行diff算法，
+- 另外一个系统，render函数当中依赖于reactive重新执行render函数，响应式系统
 ![alt text](image-2.png)
-babel相似
-reactivity响应式系统
-runtimedom针对浏览器,runtime-core渲染器
+- babel相似
+- reactivity响应式系统
+- runtimedom针对浏览器,runtime-core渲染器
 160
 161
 createApp(App).mount('#app')
