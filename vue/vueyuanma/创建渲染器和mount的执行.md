@@ -239,10 +239,10 @@ function baseCreateRenderer(
   }
 
 ```
-baseCreateRenderer,之后对方法做重载
+- baseCreateRenderer,之后对方法做重载
 
-这个方法是内部的方法
-真正返回的对象是这样的
+- 这个方法是内部的方法
+- 真正返回的对象是这样的
 ```bash
 return {
     render,//核心的函数，负责将虚拟dom渲染成为真实的dom
@@ -255,7 +255,7 @@ return {
 
 ![alt text](image-4.png)
 
-调用ensureRenderer之后返回三个对象,render,hydrate,createApp:createAppAPI(render,hydrate)
+- 调用ensureRenderer之后返回三个对象,render,hydrate,createApp:createAppAPI(render,hydrate)
 //颗粒化
 ![alt text](image-5.png)
 
