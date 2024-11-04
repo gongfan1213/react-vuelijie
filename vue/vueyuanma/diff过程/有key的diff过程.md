@@ -1,6 +1,6 @@
 # block的diff过程
-patchBlockChildren,dynamicCHildren进行优化
-进行对应的优化,diff算法性能更高的，diff算法更高的额，
+- patchBlockChildren,dynamicCHildren进行优化
+- 进行对应的优化,diff算法性能更高的，diff算法更高的额，
 # 有key的diff算法过程
 部分代码
 ```js
