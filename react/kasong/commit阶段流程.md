@@ -10,7 +10,6 @@
 
 const rootHasEffect = (finishedWork.flags !== NoFlags) 
   && (BeforeMutationMask | MutationMask | LayoutMask | PassiveMask);
-
 if (subtreeHasEffects || rootHasEffect) {
   // 省略进入三个子阶段
 } else {
