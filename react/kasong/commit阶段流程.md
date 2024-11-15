@@ -4,7 +4,7 @@
 - commitRoot(root);root代表本次更新所属FiberRootNode,root.finishedWork代表Wip HostRootFiber,就是render阶段构建的wip fiber tree的hostRootFiber
 - 三个子阶段执行之前，需要判断本次更新是否涉及和三个子阶段相关的副作用，
 
-  ```js
+```js
   const subtreeHasEffects = (finishedWork.subtreeFlags !== NoFlags) 
   && (BeforeMutationMask | MutationMask | LayoutMask | PassiveMask);
 
@@ -16,6 +16,8 @@ const rootHasEffect = (finishedWork.flags !== NoFlags)
       // 省略本次更新没有三个子阶段的副作用
     }
 ```
+
+
 - 其中 subtreeHasEffects 代表 “WIP HostRootFiber 的子孙元素存在的副作用 flags”
 - rootHasEffect 代表 “WIP HostRootFiber 本身存在的副作用 flags”。
 -  所以当 WIP HostRootFiber 或其子孙存在副作用 flags 时，会进入三个子阶段，否则会跳过三个子阶段。
