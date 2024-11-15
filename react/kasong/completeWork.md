@@ -11,13 +11,14 @@
 -当重新流程经过 Reconciler 以后,会得到一颗 WipFiber Tree,其中部分 fiberNode .标记 flags. Renderer需要对被标记的 fiberNode 对应的的 DOM元素"执行 “flags 对应的
 的 DOM 操作"如何找到这些散落在wip fiber tree各处的被标记的fiberNode的呢？flags冒泡的作用
 - completeWork属于归阶段，从叶子元素开始整体流程是自下而上的，subtreeFlags记录了该fiberNode的所有的子孙fiberNode上被标记的flags每一个fiberNode经过如下的操作，可以把子孙fiberNode当中标记的flags向上冒泡一层
-  ```js
+  
+```js
 let subrtreeFlags = NoFlags;
 subtreeFlags |= child.subtreeFlags;//收集子fiberNode的子孙的fiberNode当中标记flags
 subtreeFlags |= child.flags;//收集子fiberNode当中标记的flags
 completedWork.subtreeFlags |= subtreeFlags//附加在当前fiberNOde的subtreeFlags上的
 
-  ```
+```
 - 当hostRootFiber完成completeWWork整棵Wip Fiber Tree当中所有的被标记的flags都在HostRootFiber.subtreeFlags当中定义，在renderer当中，通过任意一级的fiberNode.subtreeFlags都可以快速确定该fiberNode所在的子树是否存在副作用需要执行
 ## mount概览
 - 与beginWork相同，completeWork通过current!===null判断是否处于update流程，在mount流程当中首先通过createInstance创建fiberNode对应的dom元素
@@ -25,6 +26,7 @@ completedWork.subtreeFlags |= subtreeFlags//附加在当前fiberNOde的subtreeFl
 - (1)从当前fiberNode向下遍历，将遍历到的第一层DOM元素类型(HostComponent, HostText)通过appendChild方法插入parent末尾:
 - (2)对兄弟fiberNode执行步骤(1):
 - (3)如果没有兄弟fiberNode，则对父fiberNode的兄弟执行步骤(1):(4)当遍历流程回到最初执行步骤(1)所在层或者parent所在层时终止。
+
 ```js
 appendAl1Children - function (parent, workinProgress，/省略参数/){
  let node - workInProgress.child;
