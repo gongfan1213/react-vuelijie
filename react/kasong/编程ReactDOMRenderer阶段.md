@@ -274,3 +274,172 @@ export default {
   }
 };
 ```
+
+
+
+下面是您提供的代码经过整理和注释后的版本。我们将确保代码的可读性，并添加详细的注释以解释每个部分的功能。
+
+### 整理后的 `customRenderer.js`
+
+```javascript
+import ReactReconciler from "react-reconciler";
+
+// 宿主环境配置项
+const hostConfig = {
+  // 获取根主机上下文
+  getRootHostContext: () => {
+    return {};
+  },
+
+  // 获取子主机上下文
+  getChildHostContext: () => {
+    return {};
+  },
+
+  // 准备提交
+  prepareForCommit: () => true,
+
+  // 提交后重置
+  resetAfterCommit: () => {},
+
+  // 判断是否设置文本内容
+  shouldSetTextContent: (_, props) => {
+    return (
+      typeof props.children === "string" || 
+      typeof props.children === "number"
+    );
+  },
+
+  // 创建元素节点
+  createInstance: (type, newProps, rootContainerInstance, _currentHostContext, workInProgress) => {
+    // 创建一个新的 DOM 元素
+    const domElement = document.createElement(type);
+
+    // 遍历新属性并设置到 DOM 元素上
+    Object.keys(newProps).forEach((propName) => {
+      const propValue = newProps[propName];
+
+      if (propName === "children") {
+        // 处理 children 属性
+        if (typeof propValue === "string" || typeof propValue === "number") {
+          domElement.textContent = propValue; // 设置文本内容
+        }
+      } else if (propName === "onClick") {
+        // 处理点击事件
+        domElement.addEventListener("click", propValue);
+      } else if (propName === "className") {
+        // 处理类名
+        domElement.setAttribute("class", propValue);
+      } else {
+        // 处理其他属性
+        domElement.setAttribute(propName, propValue);
+      }
+    });
+
+    return domElement; // 返回创建的 DOM 元素
+  },
+
+  // 创建文本节点
+  createTextInstance: (text) => {
+    return document.createTextNode(text); // 创建文本节点
+  },
+
+  // 处理初始子节点
+  finalizeInitialChildren: () => {},
+
+  // 清空容器
+  clearContainer: () => {},
+
+  // 追加初始子节点
+  appendInitialChild: (parent, child) => {
+    parent.appendChild(child); // 将子节点添加到父节点
+  },
+
+  // 支持的变更类型
+  supportsMutation: true,
+
+  // 更新 DOM 元素的准备
+  prepareUpdate: (domElement, oldProps, newProps) => {
+    return true; // 返回 true 表示需要更新
+  },
+
+  // 提交更新
+  commitUpdate: (domElement, updatePayload, type, oldProps, newProps) => {
+    // 遍历新属性并更新到 DOM 元素上
+    Object.keys(newProps).forEach((propName) => {
+      const propValue = newProps[propName];
+
+      if (propName === "children") {
+        // 处理 children 属性
+        if (typeof propValue === "string" || typeof propValue === "number") {
+          domElement.textContent = propValue; // 更新文本内容
+        }
+      } else {
+        // 更新其他属性
+        domElement.setAttribute(propName, propValue);
+      }
+    });
+  },
+
+  // 提交文本更新
+  commitTextUpdate: (textInstance, oldText, newText) => {
+    textInstance.text = newText; // 更新文本节点的内容
+  },
+
+  // 移除子节点
+  removeChild: (parentInstance, child) => {
+    parentInstance.removeChild(child); // 从父节点中移除子节点
+  }
+};
+
+// 初始化 ReactReconciler
+const ReactReconcilerInst = ReactReconciler(hostConfig);
+
+// 导出一个包含 render 方法的对象
+export default {
+  render: (reactElement, domElement, callback) => {
+    // 创建根容器
+    if (!domElement._rootContainer) {
+      domElement._rootContainer = ReactReconcilerInst.createContainer(domElement, false);
+    }
+
+    // 更新根容器
+    return ReactReconcilerInst.updateContainer(
+      reactElement,
+      domElement._rootContainer,
+      null,
+      callback
+    );
+  }
+};
+```
+
+### 代码注释说明
+
+1. **宿主环境配置项 (`hostConfig`)**:
+   - **getRootHostContext**: 返回根上下文，通常为空对象。
+   - **getChildHostContext**: 返回子上下文，通常为空对象。
+   - **prepareForCommit**: 准备提交，返回 `true` 表示准备好。
+   - **resetAfterCommit**: 提交后重置的操作，当前为空函数。
+   - **shouldSetTextContent**: 判断 `props.children` 是否为字符串或数字，以决定是否设置文本内容。
+   - **createInstance**: 创建 DOM 元素并设置属性，包括处理 `children`、`onClick` 和 `className`。
+   - **createTextInstance**: 创建文本节点。
+   - **finalizeInitialChildren**: 处理初始子节点的逻辑，当前为空函数。
+   - **clearContainer**: 清空容器的操作，当前为空函数。
+   - **appendInitialChild**: 将子节点添加到父节点。
+   - **supportsMutation**: 表示支持变更操作。
+   - **prepareUpdate**: 准备更新，返回 `true` 表示需要更新。
+   - **commitUpdate**: 提交更新，遍历新属性并更新到 DOM 元素。
+   - **commitTextUpdate**: 提交文本更新，更新文本节点的内容。
+   - **removeChild**: 从父节点中移除子节点。
+
+2. **ReactReconciler 实例**
+   - 使用 ReactReconciler 初始化 hostConfig。
+  - 导出 render 方法:
+
+  - 检查 domElement 是否已经有 _rootContainer，如果没有则创建一个新的容器。
+  - 使用 updateContainer 方法更新容器中的内容。
+  - 注意事项
+  - 这个实现是一个基础的 ReactDOM Renderer，适合用于学习和理解 React 的渲染机制。
+  - 你可以根据需要扩展 hostConfig，以支持更多的功能和复杂的组件。
+确保在使用时，React 和 React Reconciler 的版本兼容。
