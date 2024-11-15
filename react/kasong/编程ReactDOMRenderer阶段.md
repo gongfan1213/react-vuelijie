@@ -3,7 +3,9 @@
 ```js
 npx create-react-app reactdom-demo
 ```
+
 - 新建customRender.js引入react-reconciler并且完成初始化，hostConfig是宿主环境配置项后续我们将完善配置项
+
   
 ```js
 import ReactReconciler from 'react-reconciler'
@@ -12,7 +14,10 @@ const hostConfig = {};
 //初始化ReactReconciler
 const ReactReconcilerInst = ReactReconciler(hostConfig);
 ```
+
 - 执行customerRender.js导出一个包含render方法的对象
+
+  
 ```js
 export default {
 //render方法
@@ -25,6 +30,7 @@ return ReactReconcilerInst.updateContainer(reactElement,domElement._rootContaine
 }
 };
 ```
+
 - 在项目入口文件，将reactDOM替换成为CustomeRenderer
 
 ```js
@@ -35,6 +41,8 @@ import App from './App'; // 假设你有一个 App 组件
 
 CustomeRenderer.render(<App/>,document.getElementById('root'))
 ```
+
+
 - 然后实现hostConfig配置，填充空函数，避免应用因为缺失必要的函数而报错的
 在 React 的 Fiber 架构中，`hostConfig` 是一个重要的配置对象，它定义了如何在特定平台上渲染组件。为了避免应用因为缺失必要的函数而报错，我们可以实现一个基本的 `hostConfig` 配置，填充一些空函数。以下是一个示例实现：
 
@@ -122,6 +130,8 @@ export default hostConfig;
 - 创建domNode
 - createInstance创建dom元素,create TextInstance创建dom的textNode
 - 关键逻辑的判断，shouldSetTextContent用于判断组件的children是否是文本节点
+
+
 ```js
 function shouldSetTextContent(type, props) {
   // 检查 props.children 是否是有效的文本内容
@@ -132,13 +142,13 @@ function shouldSetTextContent(type, props) {
     (Array.isArray(children) && children.every(child => typeof child === 'string' || typeof child === 'number'))
   );
 }
-
 ```
+
 - dom操作
 - appendInitialChild插入dom元素placement flag
 - removeChild删除子dom元素,childDeletion flag,removeChild
 
-  ```js
+```js
 import ReactReconciler from 'react-reconciler';
 
 // 宿主环境配置项
@@ -263,6 +273,4 @@ export default {
     return ReactReconcilerInst.updateContainer(reactElement, domElement._rootContainer, null, callback);
   }
 };
-
-
-  ```
+```
