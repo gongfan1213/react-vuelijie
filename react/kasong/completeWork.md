@@ -82,4 +82,120 @@ hello
 - (5)执行finalizeInitialChildren完成属性初始化;
 - (6)执行bubbleProperties 完成flags冒泡。
 - 现在来回答在3.2.1节中提出的问题:如果mountChildFibers不标记flags,mount时如何完成UI渲染?
-- 由于appendAllChildren方法的存在，当completeWork 执行到HostRootFiber时，已经形成一棵完整的离屏DOMTree。再观察图2-9，mount时构建Wip Fiber Tree，并不是所有 fiberNode都不存在alternate。由于HostRootFiber存在alternate(即 HostRootFiber.current!=null )，因此HostRootFiber在beginWork时会进入
+- 由于appendAllChildren方法的存在，当completeWork 执行到HostRootFiber时，已经形成一棵完整的离屏DOMTree。再观察图2-9，mount时构建Wip Fiber Tree，并不是所有 fiberNode都不存在alternate。由于HostRootFiber存在alternate(即 HostRootFiber.current!=null )，因此HostRootFiber在beginWork时会进入reconcileChildFibers而不是mountChidFibers，他的子fiberNode会被标记Placement
+- render会发现本次更新流程当中存在一个placement flag,执行一次parentNode.appendChild或者parent.insertBefore就可以将已经构建好的离屏的DOM tree插入到页面当中，如果mountChildFibers也会标记Flags那么对于首屏渲染这样的初始化的场景，就需要执行大量parentNode.appendChild或者parentNode.insertBefore方法，相比之下，离屏构建后再执行一次插入性能更佳
+## update概览
+- 基于hostComponent的completeWork的update流程
+- mount属性的初始化，update完成标记属性的更新,updateHostCompoennt主要逻辑在diffProperties方法当中，包括两次遍历
+- 第一次便利:标记删除更新前有更新后没有的属性
+- 第二次遍历：标记更新，update流程前后发生改变的属性
+- 根据新的属性值更新 DOM 元素的属性，
+```js
+chatgt生成的
+function diffProperties(
+  domElement, // 要更新的 DOM 元素
+  tag, // 元素的标签名
+  lastRawProps, // 上一个属性对象
+  nextRawProps, // 下一个属性对象
+  rootContainmentElement // 根容器元素
+) {
+  // 1. 获取上一个和下一个属性的键
+  const lastPropsKeys = Object.keys(lastRawProps);
+  const nextPropsKeys = Object.keys(nextRawProps);
+
+  // 2. 创建一个集合来存储需要更新的属性
+  const updatePayload = [];
+
+  // 3. 遍历上一个属性对象，检查哪些属性需要被移除或更新
+  for (const key of lastPropsKeys) {
+    const lastValue = lastRawProps[key];
+    const nextValue = nextRawProps[key];
+
+    // 4. 如果下一个属性中没有这个键，说明需要移除这个属性
+    if (nextValue == null) {
+      updatePayload.push({ type: 'REMOVE', key });
+    } else if (lastValue !== nextValue) {
+      // 5. 如果值不同，说明需要更新这个属性
+      updatePayload.push({ type: 'UPDATE', key, value: nextValue });
+    }
+  }
+
+  // 6. 遍历下一个属性对象，检查哪些属性是新增的
+  for (const key of nextPropsKeys) {
+    if (!(key in lastRawProps)) {
+      // 7. 如果上一个属性中没有这个键，说明是新增的属性
+      updatePayload.push({ type: 'ADD', key, value: nextRawProps[key] });
+    }
+  }
+
+  // 8. 根据更新的 payload 更新 DOM 元素
+  for (const update of updatePayload) {
+    switch (update.type) {
+      case 'REMOVE':
+        // 9. 移除属性
+        domElement.removeAttribute(update.key);
+        break;
+      case 'UPDATE':
+        // 10. 更新属性
+        domElement.setAttribute(update.key, update.value);
+        break;
+      case 'ADD':
+        // 11. 添加新属性
+        domElement.setAttribute(update.key, update.value);
+        break;
+    }
+  }
+}
+```
+
+```js
+function diffProperties (domeElement,tag,lastRawProps,nextRawProps,rootContainerElement) {
+  let updatePayload= null;
+  //保存变化的属性key,value
+  let lastProps;
+  //更新前的属性
+  let nextProps;
+  //标记删除更新前有，更新后没有的属性
+  for(let key in lastRawProps) {
+    if (nextRawProps.hasOwnProperty(key)) {
+      if (nextProps.hasOwnProperty(propKey) || !lastProps.hasOwnProperty(propKey) || lastProps[propKey] =null) {
+        // 属性值不同
+        continue;
+      }
+      //处理style
+      if(propKey ==== STYLE) {
+
+      }else {
+        //其他属性
+        (updatePayload= updatePayload || []).push(propKey,null);
+      }
+    } 
+    // 标记更新update流程前后发生改变的属性
+    for(propKey in nextProps ) {
+      let nextProp = nextProps[propKey];
+      let lastProp = lastProps!= null ?lastProps[propKey] : undefined;
+      if (!nextProps.hasOwnProperty(propKey) || nextProp === lastProp || nextProp === null&& lastProp === null) {
+        continue;
+      }
+      //处理style
+      if(propKey ==== STYLE) {
+    }else if (propKey ==== CHILDREN){
+
+    }else if(propKey ===DANGEROUSLY_SET_INNER_HTML){
+      //省略处理innerHTMl
+    }else if(registrationNameDependencies.hasOwnProperty(propKey)) {
+      if(nextProp!=null) {
+        //省略处理onScroll事件
+      }else{
+        //省略处理其他属性
+      }
+    }
+    //省略代码
+    return updatePayload;
+}
+
+```
+
+- 所有的变化属性的key,value会保存在fiberNode.updateQueue当中,同时该fiberNode会标记update
+- - workInProgress.flags |=update
+  - 
