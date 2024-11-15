@@ -130,3 +130,47 @@ function commitXXXEffects_begin() {
 - 即当前 fiberNode 是“包含该子阶段对应 flags”的“层级最低”的 fiberNode:
 - 当前 fiberNode 不存在子 fiberNode，即当前 fiberNode 是叶子元素。
 - 对于一些子阶段，在 commitXXXEffects_begin 向下遍历过程中还会执行“该子阶段特有的操作”，这部分内容将在介绍子阶段时讲解。
+
+以下是您提供的内容经过整理和修正后的版本，确保语法和逻辑的正确性，并保持原有结构。
+
+
+#### 3. commitXXXEffects_complete
+
+执行“flags 对应操作”的函数，包含三个步骤：
+
+1. 对当前 `fiberNode` 执行“flags 对应操作”，即执行 `commitXXXEffectsOnFiber`。
+2. 如果当前 `fiberNode` 存在兄弟 `fiberNode`，则对兄弟 `fiberNode` 执行 `commitXXXEffects_begin`。
+3. 如果不存在兄弟 `fiberNode`，则对父 `fiberNode` 执行 `commitXXXEffects_complete`。
+
+代码如下：
+
+```javascript
+function commitXXXEffects_complete(root) {
+  while (nextEffect !== null) {
+    let fiber = nextEffect;
+    try {
+      commitXXXEffectsOnFiber(fiber, root);
+    } catch (error) {
+      // 错误处理
+      captureCommitPhaseError(fiber, fiber.return, error);
+    }
+
+    let sibling = fiber.sibling;
+    if (sibling !== null) {
+      // 省略辅助方法
+      nextEffect = sibling;
+      return;
+    }
+    nextEffect = fiber.return;
+  }
+}
+```
+
+综上所述，子阶段的遍历会以 DFS 的顺序，从 `HostRootFiber` 开始向下遍历到第一个满足如下条件的 `fiberNode`:
+
+- `(fiber.subtreeFlags & XXXMask) !== NoFlags` 
+- `child !== null`
+
+再从该 `fiberNode` 向上遍历直到 `HostRootFiber`（`HostRootFiber.return === null`）为止。在遍历过程中会执行“flags 对应操作”。
+
+
