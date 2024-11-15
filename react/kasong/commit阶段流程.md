@@ -10,11 +10,11 @@
 
 const rootHasEffect = (finishedWork.flags !== NoFlags) 
   && (BeforeMutationMask | MutationMask | LayoutMask | PassiveMask);
-if (subtreeHasEffects || rootHasEffect) {
-  // 省略进入三个子阶段
-} else {
-  // 省略本次更新没有三个子阶段的副作用
-}
+    if (subtreeHasEffects || rootHasEffect) {
+      // 省略进入三个子阶段
+    } else {
+      // 省略本次更新没有三个子阶段的副作用
+    }
 ```
 - 其中 subtreeHasEffects 代表 “WIP HostRootFiber 的子孙元素存在的副作用 flags”
 - rootHasEffect 代表 “WIP HostRootFiber 本身存在的副作用 flags”。
