@@ -39,6 +39,8 @@ workInProgress。flags ｜= ref;
 }
 }
 ```
+
+
 - 以下这两种情况会标记ref flag
 - mount的时候，current ===null ref props存在的时候
 - update的时候并且ref,props发生了变化
@@ -56,9 +58,3 @@ commitDetachRef（current）；
 ```
 
 
-
-
-```
-```
--
-```
