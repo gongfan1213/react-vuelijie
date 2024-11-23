@@ -108,6 +108,8 @@ return <inpur {...props}/>
   );
   }
   ```
+
+  
   - 点击button按钮程序会出现报错。因为myform组件当中向MyInput传递ref失败，inputRef.current并没有指向input元素，原因是上文提到的为了将ref失控的范围控制在单个组件内，react默认情况下不支持跨组件传递ref
   - 默认情况下不支持跨组件传递ref
   - 取消这个限制可以使用forwardref
@@ -115,7 +117,7 @@ return <inpur {...props}/>
   - useImperativeHandle(ref,createHandle,[deps]);
   - 经过·useImpoerativeHandle处理过的ref可以人为的移除可能造成的ref失控的属性或者方法
 
-  ```js
+```js
 const MyInput = forwardRef((props,ref)=>{
 const reaulInputRef = useRef(null);
 useImpoeratveHnalde(ref,()=>({
@@ -129,5 +131,3 @@ return <input {...props} ref={realInputRef}/>;
 
 
 
-
-  ```
