@@ -84,6 +84,12 @@ function App() {
 ```
 
 对应的Fiber树结构如下图所示：
+- 这里需要提一下，为什么父级指针叫做return而不是parent或者father呢？因为作为一个工作单元，return指节点执行完completeWork（本章后面会介绍）后会返回的下一个节点。子Fiber节点及其兄弟节点完成工作后会返回其父级节点，所以用return指代父级节点。
+
+
+
+
+<img width="410" alt="image" src="https://github.com/user-attachments/assets/667a8643-53e6-49b7-807d-c48febdbde91" />
 
 ![Fiber架构](https://user-images.githubusercontent.com/316198/828710-828710.png)
 
