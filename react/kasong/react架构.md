@@ -1,3 +1,4 @@
+# react 旧架构
 在上一节中，我们了解了 React 的理念，即实现快速响应的用户体验。然而，React 从 v15 升级到 v16，重写了整个架构，这是因为 v15 的架构无法满足快速响应的理念。本节我们深入探讨 React15 的架构及其缺陷，了解为什么需要对其进行重构。
 
 ### React15 架构概览
@@ -62,3 +63,59 @@ React15 的架构由于采用同步递归更新的方式，无法满足快速响
 为了解决这些问题，React 从 v16 开始，重写了架构，引入了 Fiber 架构，支持可中断的异步更新。这使得 React 能够更好地利用浏览器的渲染机制，提高应用的性能和响应速度。
 
 React 的重构体现了其对用户体验的重视和对性能优化的追求。通过深入理解 React15 的缺陷，我们更能欣赏 React16 所带来的革新。
+
+# react新架构
+### React16 架构总结
+
+React16 引入了新的架构来支持异步更新，主要分为三层：Scheduler（调度器）、Reconciler（协调器）和 Renderer（渲染器）。下面是对这三层的详细解释和它们在更新流程中的作用。
+
+#### 1. Scheduler（调度器）
+
+Scheduler 是 React16 新增的一个独立库，用于调度任务的优先级。它的主要功能包括：
+
+- **调度任务**：根据任务的优先级，高优先级任务优先进入 Reconciler。
+- **空闲时触发回调**：类似于 `requestIdleCallback`，但功能更完备，解决了浏览器兼容性和触发频率不稳定的问题。
+- **多种调度优先级**：提供多种优先级供任务设置，以便更灵活地管理任务执行顺序。
+
+#### 2. Reconciler（协调器）
+
+Reconciler 负责找出变化的组件。在 React16 中，Reconciler 采用了 Fiber 架构，使得更新工作从递归变成了可以中断的循环过程。每次循环都会调用 `shouldYield` 判断当前是否有剩余时间。
+
+- **Fiber 架构**：使得更新过程可以被中断和恢复，解决了 React15 中递归更新无法中断的问题。
+- **标记变化**：Reconciler 会为变化的虚拟 DOM 打上代表增/删/更新的标记，如 `Placement`、`Update`、`Deletion` 等。
+- **内存中操作**：所有的协调工作都在内存中进行，只有当所有组件都完成协调工作，才会统一交给 Renderer。
+
+#### 3. Renderer（渲染器）
+
+Renderer 根据 Reconciler 为虚拟 DOM 打的标记，同步执行对应的 DOM 操作。
+
+- **同步执行 DOM 操作**：Renderer 会根据标记执行增/删/更新操作，确保页面上的 DOM 是完整和一致的。
+- **避免不完全更新**：由于所有的协调工作都在内存中进行，只有在所有组件都完成协调后才会进行渲染，避免了不完全更新的问题。
+
+### 更新流程
+
+在 React16 架构中，整个更新流程如下：
+
+1. **Scheduler 接收更新任务**：当用户点击按钮产生一个更新时，Scheduler 会接收这个更新任务，并检查是否有其他高优先级的任务需要先执行。
+2. **Reconciler 协调更新**：如果没有其他高优先级任务，Scheduler 会将任务交给 Reconciler。Reconciler 会找出虚拟 DOM 中的变化，并为变化的部分打上标记。
+3. **Renderer 渲染更新**：当所有组件都完成协调工作后，Reconciler 会将打好标记的虚拟 DOM 交给 Renderer。Renderer 会根据标记同步执行 DOM 操作，更新页面。
+
+### 关键点总结
+
+- **异步更新**：通过 Fiber 架构，React16 实现了可以中断和恢复的异步更新。
+- **调度优先级**：Scheduler 提供了多种调度优先级，确保高优先级任务优先执行。
+- **内存中操作**：Reconciler 的所有工作都在内存中进行，避免了不完全更新的问题。
+- **同步渲染**：Renderer 根据 Reconciler 的标记同步执行 DOM 操作，确保页面更新的完整性。
+
+### 参考资料
+
+- [Building a Custom React Renderer | React 前经理 Sophie Alpert](https://reactjs.org/docs/codebase-overview.html)
+- [React Fiber Architecture](https://github.com/acdlite/react-fiber-architecture)
+
+通过本节的学习，我们了解了 React16 的新架构及其如何支持异步更新。接下来，我们将深入探讨 Fiber 架构及其在 Reconciler 中的具体实现。
+
+
+
+
+
+
