@@ -223,6 +223,9 @@ function App() {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
+
+![image](https://github.com/user-attachments/assets/2369c784-c42d-4122-9ef9-e91a22c17d67)
+
 ### 参考资料
 
 - [beginWork 流程图](https://react.iamkasong.com/process/beginWork.html)
