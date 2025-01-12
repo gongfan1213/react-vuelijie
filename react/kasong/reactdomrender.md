@@ -42,6 +42,7 @@ export function createFiberRoot(
   return root;
 }
 ```
+<img width="546" alt="image" src="https://github.com/user-attachments/assets/57390104-bad4-4966-9f7e-6437ebcb8527" />
 
 ### 创建 Update
 
