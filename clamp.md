@@ -117,35 +117,40 @@ float result = clamp(x, 0.0, 10.0); // result = 5.0
 
 #### **5.1 游戏开发**
 - **限制角色属性**：如生命值、魔法值、速度等。
-  ```javascript
+- 
+```javascript
 let health = clamp(currentHealth, 0, maxHealth);
 ```
 
 #### **5.2 图形处理**
 - **限制颜色值**：确保 RGB 值在 0 到 255 之间。
-  ```javascript
+
+```javascript
 let red = clamp(color.red, 0, 255);
 ```
 
 #### **5.3 用户界面**
 - **滑块控件**：限制滑块的值在最小和最大范围内。
-  ```javascript
+- 
+```javascript
 let sliderValue = clamp(inputValue, minValue, maxValue);
 ```
 
 #### **5.4 物理模拟**
 - **限制速度**：防止物体速度超过物理引擎的限制。
-  ```javascript
+
+```javascript
 let velocity = clamp(currentVelocity, minVelocity, maxVelocity);
 ```
 
 #### **5.5 数据校验**
 - **限制输入值**：确保用户输入的数值在合理范围内。
-  ```javascript
+
+  
+```javascript
 let age = clamp(userInputAge, 0, 120);
 ```
 
----
 
 ### **6. Clamp 函数的优点**
 
