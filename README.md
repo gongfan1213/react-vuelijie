@@ -8,3 +8,26 @@
 - 你只说了一句话，你没有完全分析完，请你重新分析解释一下
 - 分析功能，可以用流程图表示
 - 我是x性，我的公历出生日期是xxxx年x月x日x时。请用盲派技巧逐步分析八字，请分析我的一生运势，以及体貌特征，时间节点，事件，涵盖各方面，尽可能详细具体。着重分析大运能赚多少钱，包括学业和婚姻，判断出准确的关系模型后输出最终结果，诚实一点评价，用语不用太温和。
+- 滤镜
+- src/templates/2dEditor/components/FrontApps/const.ts
+- src/templates/2dEditor/components/MainUi/MainUiLeft/MainUiLeftImageTool/ImageEffect.tsx
+- src/templates/2dEditor/core/plugin/ImageToolPlugin.ts
+- ai应用部分
+- src/templates/LightPainting/components/Step2Components/index.tsx
+- src/templates/2dEditor/components/FrontApps/RoyalPortrait/index.tsx
+- src/templates/2dEditor/components/FrontApps/Pet/index.tsx
+- src/templates/2dEditor/components/FrontApps/index.tsx
+```js
+export const AppsTitle = {
+   '1': 'AI Portrait',
+   '2': 'Master Landscape',
+   '3': 'Master Portrait',
+   '4': 'Pop Art Maker',
+   '5': 'AI Product Designer',
+   '6': 'Pet Portrait',
+   '7': 'Dream Portrait',
+   '8': 'Classic Portrait',
+   '9': 'Line Art',
+   '10': 'Light Painting'
+}
+```
